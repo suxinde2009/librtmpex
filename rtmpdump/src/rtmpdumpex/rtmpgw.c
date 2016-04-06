@@ -381,7 +381,7 @@ void processTCPrequest(STREAMING_SERVER * server,	// server socket and state (ou
 	  RTMP_LogPrintf("%s, Range request not supported\n", __FUNCTION__);
 	  len = sprintf(buf, "HTTP/1.0 416 Requested Range Not Satisfiable%s\r\n",
 		  srvhead);
-	  send(sockfd, buf, len, 0);
+	  send(sockfd, buf, len, SO_NOSIGPIPE);
 	  goto quit;
 	}
 
@@ -530,7 +530,7 @@ void processTCPrequest(STREAMING_SERVER * server,	// server socket and state (ou
 
   // after validation of the http request send response header
   len = sprintf(buf, "HTTP/1.0 200 OK%sContent-Type: video/flv\r\n\r\n", srvhead);
-  send(sockfd, buf, len, 0);
+  send(sockfd, buf, len, SO_NOSIGPIPE);
 
   // send the packets
   buffer = (char *) calloc(PACKET_SIZE, 1);
@@ -595,7 +595,7 @@ void processTCPrequest(STREAMING_SERVER * server,	// server socket and state (ou
 
 	  if (nRead > 0)
 	    {
-	      if ((nWritten = send(sockfd, buffer, nRead, 0)) < 0)
+	      if ((nWritten = send(sockfd, buffer, nRead, SO_NOSIGPIPE)) < 0)
 		{
 		  RTMP_Log(RTMP_LOGERROR, "%s, sending failed, error: %d", __FUNCTION__,
 		      GetSockError());
@@ -657,7 +657,7 @@ quit:
 filenotfound:
   RTMP_LogPrintf("%s, %s, %s\n", __FUNCTION__, status, filename);
   len = sprintf(buf, "HTTP/1.0 %s%s\r\n", status, srvhead);
-  send(sockfd, buf, len, 0);
+  send(sockfd, buf, len, SO_NOSIGPIPE);
   goto quit;
 }
 
