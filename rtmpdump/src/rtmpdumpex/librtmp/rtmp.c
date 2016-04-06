@@ -1016,6 +1016,8 @@ RTMP_Connect0Ex(RTMP *r, struct sockaddr * service, long timeout)
     }
     
     setsockopt(r->m_sb.sb_socket, IPPROTO_TCP, TCP_NODELAY, (char *) &on, sizeof(on));
+    int value = 1;
+    setsockopt(r->m_sb.sb_socket, SOL_SOCKET, SO_NOSIGPIPE, &value, sizeof(value));
     
     return TRUE;
 }
