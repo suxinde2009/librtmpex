@@ -1007,8 +1007,8 @@ RTMP_Connect0Ex(RTMP *r, struct sockaddr * service, long timeout)
             RTMP_Log(RTMP_LOGERROR, "%s, Setting socket rcv timeout to %ds failed!",
                      __FUNCTION__, r->Link.timeout);
         }
-        if (setsockopt
-            (r->m_sb.sb_socket, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv, sizeof(tv)))
+        SET_SNDTIMEO(sendTime,0,200);
+        if (setsockopt(r->m_sb.sb_socket, SOL_SOCKET, SO_SNDTIMEO, (char *)&sendTime, sizeof(sendTime)))
         {
             RTMP_Log(RTMP_LOGERROR, "%s, Setting socket send timeout to %ds failed!",
                      __FUNCTION__, r->Link.timeout);
@@ -1062,15 +1062,15 @@ RTMP_Connect0(RTMP *r, struct sockaddr * service)
 
   /* set timeout */
   {
-    SET_RCVTIMEO(tv, r->Link.timeout);
-    if (setsockopt
+      SET_RCVTIMEO(tv, r->Link.timeout);
+      if (setsockopt
         (r->m_sb.sb_socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(tv)))
       {
         RTMP_Log(RTMP_LOGERROR, "%s, Setting socket timeout to %ds failed!",
 	    __FUNCTION__, r->Link.timeout);
       }
-      if (setsockopt
-          (r->m_sb.sb_socket, SOL_SOCKET, SO_SNDTIMEO, (char *)&tv, sizeof(tv)))
+      SET_SNDTIMEO(sendTime,0,200);
+      if (setsockopt(r->m_sb.sb_socket, SOL_SOCKET, SO_SNDTIMEO, (char *)&sendTime, sizeof(sendTime)))
       {
           RTMP_Log(RTMP_LOGERROR, "%s, Setting socket timeout to %ds failed!",
                    __FUNCTION__, r->Link.timeout);

@@ -56,6 +56,7 @@
 #define closesocket(s)	close(s)
 #define msleep(n)	usleep(n*1000)
 #define SET_RCVTIMEO(tv,s)	struct timeval tv = {s,0}
+#define SET_SNDTIMEO(tv,s,ms)	struct timeval tv = {s,ms}
 #endif
 
 #include "rtmp.h"
